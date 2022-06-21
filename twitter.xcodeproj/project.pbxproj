@@ -20,6 +20,7 @@
 		E3042FB0286111E0008BCC7D /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = E3042FAF286111E0008BCC7D /* Keys.plist */; };
 		E3042FB328612A33008BCC7D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = E3042FB228612A33008BCC7D /* User.m */; };
 		E3042FB628612C85008BCC7D /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = E3042FB528612C85008BCC7D /* Tweet.m */; };
+		E3042FB928623D3A008BCC7D /* TweetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E3042FB828623D3A008BCC7D /* TweetTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,8 @@
 		E3042FB228612A33008BCC7D /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		E3042FB428612C85008BCC7D /* Tweet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tweet.h; sourceTree = "<group>"; };
 		E3042FB528612C85008BCC7D /* Tweet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tweet.m; sourceTree = "<group>"; };
+		E3042FB728623D3A008BCC7D /* TweetTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TweetTableViewCell.h; sourceTree = "<group>"; };
+		E3042FB828623D3A008BCC7D /* TweetTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TweetTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +134,8 @@
 		6AD278FF20BCBF280085BC29 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E3042FB728623D3A008BCC7D /* TweetTableViewCell.h */,
+				E3042FB828623D3A008BCC7D /* TweetTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 				6AD278E820BC4B970085BC29 /* main.m in Sources */,
 				E3042FB628612C85008BCC7D /* Tweet.m in Sources */,
 				6AD2790620BCC0380085BC29 /* LoginViewController.m in Sources */,
+				E3042FB928623D3A008BCC7D /* TweetTableViewCell.m in Sources */,
 				6AD278DA20BC4B950085BC29 /* AppDelegate.m in Sources */,
 				6AD278F620BCB68B0085BC29 /* APIManager.m in Sources */,
 				6AD2790920BCC04D0085BC29 /* TimelineViewController.m in Sources */,
