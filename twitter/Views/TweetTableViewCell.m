@@ -8,6 +8,8 @@
 
 #import "TweetTableViewCell.h"
 #import "../Models/Tweet.h"
+#import "../API/APIManager.h"
+
 @interface TweetTableViewCell()
 @property (weak, nonatomic) IBOutlet UIImageView *userImage;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
@@ -20,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *numberOfLikes;
 @property (weak, nonatomic) IBOutlet UILabel *screenNameAndDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tweetBodyLabel;
+- (IBAction)favoriteAction:(id)sender;
+- (IBAction)retweetAction:(id)sender;
 
 @end
 
@@ -50,14 +54,72 @@
     
     UIImage *image = [UIImage imageWithData: urlData];
     [self.userImage setImage:image];
+    NSString *nameAndDateLabelString = @" . ";
+    nameAndDateLabelString = [nameAndDateLabelString stringByAppendingString:self.tweet.createdAtString];
+    self.screenNameAndDateLabel.text = [self.tweet.user.screenName stringByAppendingString: nameAndDateLabelString];
+    [self setTweet];
+}
+
+- (IBAction)retweetAction:(id)sender {
+    if(self.tweet.retweeted){
+        self.tweet.retweetCount -= 1;
+        self.tweet.retweeted = false;
+    } else{
+        self.tweet.retweetCount += 1;
+        self.tweet.retweeted = true;
+    }
+
+    [self setTweet];
+    [[APIManager shared] retweet:self.tweet completion: ^(Tweet *tweet, NSError *error){
+        if(error){
+            NSLog(@"error retweeting tweet");
+        } else{
+            NSLog(@"success in retweeting tweet!");
+        }
+
+    }];
+}
+
+- (IBAction)favoriteAction:(id)sender {
+    if(self.tweet.favorited){
+        self.tweet.favorited = false;
+        self.tweet.favoriteCount -= 1;
+    } else{
+        self.tweet.favoriteCount += 1;
+        self.tweet.favorited = true;
+    }
+
+    [self setTweet];
+    [[APIManager shared] favorite:self.tweet completion:^(Tweet *tweet, NSError *error){
+        if(error){
+            NSLog(@"error favoriting tweet");
+        } else{
+            NSLog(@"success in favoriting tweet!");
+        }
+
+    }];
+}
+
+- (void) setTweet {
+    if(self.tweet.favorited){
+        UIImage *redFavorIcon = [UIImage imageNamed:@"favor-icon-red"];
+        [self.likeButton setImage:redFavorIcon forState:UIControlStateNormal];
+    } else{
+        UIImage *greyFavorIcon = [UIImage imageNamed:@"favor-icon"];
+        [self.likeButton setImage:greyFavorIcon forState:UIControlStateNormal];
+    }
+    
+    if(self.tweet.retweeted){
+        UIImage *greenRetweetIcon =[UIImage imageNamed:@"retweet-icon-green"];
+        [self.retweetButton setImage:greenRetweetIcon forState: UIControlStateNormal];
+    } else{
+        UIImage *greyRetweetIcon = [UIImage imageNamed:@"retweet-icon"];
+        [self.retweetButton setImage:greyRetweetIcon forState: UIControlStateNormal];
+    }
+    self.tweetBodyLabel.text = self.tweet.text;
     self.userName.text = self.tweet.user.name;
     self.numberOfShares.text = @"0";
     self.numberOfRetweets.text = [NSString stringWithFormat:@"%d", self.tweet.retweetCount? self.tweet.retweetCount: 0];
     self.numberOfLikes.text = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount? self.tweet.favoriteCount : 0];
-    NSString *nameAndDateLabelString = @" . ";
-    nameAndDateLabelString = [nameAndDateLabelString stringByAppendingString:self.tweet.createdAtString];
-    self.screenNameAndDateLabel.text = [self.tweet.user.screenName stringByAppendingString: nameAndDateLabelString];
-    self.tweetBodyLabel.text = self.tweet.text;
 }
-
 @end

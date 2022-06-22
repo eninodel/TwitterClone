@@ -47,7 +47,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <segue destination="FTQ-G1-N2b" kind="presentation" identifier="loginSegue" id="CHf-4w-b5m"/>
+                        <segue destination="FTQ-G1-N2b" kind="show" identifier="loginSegue" id="CHf-4w-b5m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKJ-HH-8tn" sceneMemberID="firstResponder"/>
@@ -112,6 +112,9 @@
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="retweet-icon" title=""/>
+                                                    <connections>
+                                                        <action selector="retweetAction:" destination="7CJ-An-JRQ" eventType="touchUpInside" id="Jj3-de-HpJ"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lTT-FO-Zvh">
                                                     <rect key="frame" x="183" y="137" width="10.5" height="16"/>
@@ -126,6 +129,9 @@
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="favor-icon" title=""/>
+                                                    <connections>
+                                                        <action selector="favoriteAction:" destination="7CJ-An-JRQ" eventType="touchUpInside" id="91A-2S-sFh"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gzn-UZ-VPg">
                                                     <rect key="frame" x="260" y="135" width="10.5" height="21"/>
@@ -225,6 +231,11 @@
                                 </connections>
                             </button>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="edit-icon" id="OaK-04-hKf">
+                            <connections>
+                                <segue destination="IOV-i3-1Q1" kind="presentation" id="8bb-Uq-eIU"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="timelineTableView" destination="s4Y-wW-ZAJ" id="mfi-RP-yxY"/>
@@ -234,11 +245,68 @@
             </objects>
             <point key="canvasLocation" x="1660" y="36.431784107946029"/>
         </scene>
+        <!--Compose View Controller-->
+        <scene sceneID="1yg-Fw-dGe">
+            <objects>
+                <viewController id="70f-8y-7Rz" customClass="ComposeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SdE-1h-VBe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="DO0-73-doe">
+                                <rect key="frame" x="67" y="67" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Q8u-qm-8H2"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3bL-yf-Nx2">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="close-icon" id="oh1-lD-uNh">
+                            <connections>
+                                <action selector="exitAction:" destination="70f-8y-7Rz" id="Nax-qv-S8c"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Tweet" id="Yls-n5-bTg">
+                            <connections>
+                                <action selector="tweetAction:" destination="70f-8y-7Rz" id="SF7-6P-M3n"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="inputTextView" destination="DO0-73-doe" id="iOl-lH-kVk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UDH-8u-8Qy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3474" y="37"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="iya-O6-bvM">
+            <objects>
+                <navigationController id="IOV-i3-1Q1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bUT-zw-5vS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="70f-8y-7Rz" kind="relationship" relationship="rootViewController" id="jl5-Qq-lri"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YKH-3p-fTe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2610" y="36"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="WUT-Ke-VeR">
             <objects>
                 <navigationController storyboardIdentifier="TweetsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="FTQ-G1-N2b" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="pfH-eF-UjI"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ytz-Ev-cUB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -255,10 +323,15 @@
     </scenes>
     <resources>
         <image name="TwitterLogoBlue" width="200" height="200"/>
+        <image name="close-icon" width="26" height="24"/>
+        <image name="edit-icon" width="30" height="27"/>
         <image name="favor-icon" width="30" height="30"/>
         <image name="message-icon" width="30" height="30"/>
         <image name="reply-icon" width="30" height="30"/>
         <image name="retweet-icon" width="30" height="30"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

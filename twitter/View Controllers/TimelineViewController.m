@@ -11,8 +11,9 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "../Views/TweetTableViewCell.h"
+#import "ComposeViewController.h"
 
-@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
 - (IBAction)didTapLogout:(id)sender;
 @property (weak, nonatomic) IBOutlet UITableView *timelineTableView;
 @property (strong, nonatomic) NSMutableArray *arrayOfTweets;
@@ -47,6 +48,11 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+   UINavigationController *navigationController = [segue destinationViewController];
+   ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+   composeController.delegate = self;
+}
 
 
 - (IBAction)didTapLogout:(id)sender {
@@ -87,6 +93,18 @@
         }
     }];
 }
+
+
+- (void)didTweet:(nonnull Tweet *)tweet {
+    NSMutableArray *tweetsList = [[NSMutableArray alloc] init];
+    [tweetsList addObject:tweet];
+    for(int i = 0; i < self.arrayOfTweets.count; i++){
+        [tweetsList addObject:self.arrayOfTweets[i]];
+    }
+    self.arrayOfTweets = [tweetsList copy];
+    [self.timelineTableView reloadData];
+}
+
 
 
 @end
