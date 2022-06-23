@@ -9,6 +9,7 @@
 #import "TweetTableViewCell.h"
 #import "../Models/Tweet.h"
 #import "../API/APIManager.h"
+#import "DateTools.h"
 
 @interface TweetTableViewCell()
 @property (weak, nonatomic) IBOutlet UIImageView *userImage;
@@ -55,7 +56,7 @@
     UIImage *image = [UIImage imageWithData: urlData];
     [self.userImage setImage:image];
     NSString *nameAndDateLabelString = @" . ";
-    nameAndDateLabelString = [nameAndDateLabelString stringByAppendingString:self.tweet.createdAtString];
+    nameAndDateLabelString = [nameAndDateLabelString stringByAppendingString: self.tweet.createdAtString];
     self.screenNameAndDateLabel.text = [self.tweet.user.screenName stringByAppendingString: nameAndDateLabelString];
     [self setTweet];
 }
