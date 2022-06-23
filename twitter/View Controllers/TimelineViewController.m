@@ -12,8 +12,9 @@
 #import "LoginViewController.h"
 #import "../Views/TweetTableViewCell.h"
 #import "ComposeViewController.h"
+#import "DetailsViewController.h"
 
-@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
+@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, DetailsViewControllerDelegate>
 - (IBAction)didTapLogout:(id)sender;
 @property (weak, nonatomic) IBOutlet UITableView *timelineTableView;
 @property (strong, nonatomic) NSMutableArray *arrayOfTweets;
@@ -39,6 +40,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillLoad:(BOOL)animated
+{
+ [super viewWillAppear:animated];
+ NSLog(@"view will Appear");
+ [self.timelineTableView reloadData];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -49,9 +57,19 @@
 }
 */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-   UINavigationController *navigationController = [segue destinationViewController];
-   ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-   composeController.delegate = self;
+    UINavigationController *navigationController = [segue destinationViewController];
+    if([segue.identifier isEqualToString:@"DetailSegue"]){
+        NSIndexPath *indexOfSender = [self.timelineTableView indexPathForCell: sender];
+        Tweet *dataToPass = self.arrayOfTweets[indexOfSender.row];
+        DetailsViewController *detailVC = (DetailsViewController *) navigationController.topViewController;
+        detailVC.delegate = self;
+        detailVC.tweet = dataToPass;
+        NSLog(@"here");
+    } else{
+        
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }
 }
 
 
@@ -106,5 +124,9 @@
 }
 
 
+
+- (void)onDataChange {
+    [self.timelineTableView reloadData];
+}
 
 @end

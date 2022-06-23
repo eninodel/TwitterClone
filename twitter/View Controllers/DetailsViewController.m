@@ -1,54 +1,42 @@
 //
-//  TweetTableViewCell.m
+//  DetailsViewController.m
 //  twitter
 //
-//  Created by Edwin Delgado on 6/21/22.
+//  Created by Edwin Delgado on 6/23/22.
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
-#import "TweetTableViewCell.h"
-#import "../Models/Tweet.h"
-#import "../API/APIManager.h"
-#import "DateTools.h"
+#import "DetailsViewController.h"
+#import "Tweet.h"
+#import "APIManager.h"
 
-@interface TweetTableViewCell()
+@interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *userImage;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
+@property (weak, nonatomic) IBOutlet UILabel *screenNameAndDate;
+@property (weak, nonatomic) IBOutlet UITextView *tweetBody;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfShares;
-@property (weak, nonatomic) IBOutlet UIButton *shareButton;
-@property (weak, nonatomic) IBOutlet UIButton *retweetButton;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfRetweets;
-@property (weak, nonatomic) IBOutlet UIButton *likeButton;
+@property (weak, nonatomic) IBOutlet UILabel *numberOfFavorites;
+@property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+- (IBAction)didFavorite:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *retweetButton;
+- (IBAction)didRetweet:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (weak, nonatomic) IBOutlet UIButton *messageButton;
-@property (weak, nonatomic) IBOutlet UILabel *numberOfLikes;
-@property (weak, nonatomic) IBOutlet UILabel *screenNameAndDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *tweetBodyLabel;
-- (IBAction)favoriteAction:(id)sender;
-- (IBAction)retweetAction:(id)sender;
+- (IBAction)didPressBack:(id)sender;
 
 @end
 
+@implementation DetailsViewController
 
-@implementation TweetTableViewCell
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-- (void) initializeCell {
-    
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
     [self.shareButton setTitle:@"" forState: UIControlStateNormal];
     [self.retweetButton setTitle: @"" forState: UIControlStateNormal];
-    [self.likeButton setTitle:@"" forState: UIControlStateNormal];
+    [self.favoriteButton setTitle:@"" forState: UIControlStateNormal];
     [self.messageButton setTitle:@"" forState: UIControlStateNormal];
-    
     NSString *URLString = self.tweet.user.profilePicture;
     NSURL *url = [NSURL URLWithString:URLString];
     NSData *urlData = [NSData dataWithContentsOfURL:url];
@@ -59,32 +47,23 @@
     self.userImage.layer.masksToBounds = true;
     NSString *nameAndDateLabelString = @" . ";
     nameAndDateLabelString = [nameAndDateLabelString stringByAppendingString: self.tweet.createdAtString];
-    self.screenNameAndDateLabel.text = [self.tweet.user.screenName stringByAppendingString: nameAndDateLabelString];
+    self.screenNameAndDate.text = [self.tweet.user.screenName stringByAppendingString: nameAndDateLabelString];
     [self setTweet];
 }
 
-- (IBAction)retweetAction:(id)sender {
-    if(self.tweet.retweeted){
-        self.tweet.retweetCount -= 1;
-        self.tweet.retweeted = false;
-    } else{
-        self.tweet.retweetCount += 1;
-        self.tweet.retweeted = true;
-    }
+/*
+#pragma mark - Navigation
 
-//    [self setTweet];
-    [[APIManager shared] retweet:self.tweet completion: ^(Tweet *tweet, NSError *error){
-        if(error){
-            NSLog(@"error retweeting tweet");
-        } else{
-            [self setTweet];
-            NSLog(@"success in retweeting tweet!");
-        }
-
-    }];
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
 }
+*/
 
-- (IBAction)favoriteAction:(id)sender {
+
+
+- (IBAction)didFavorite:(id)sender {
     if(self.tweet.favorited){
         self.tweet.favorited = false;
         self.tweet.favoriteCount -= 1;
@@ -100,7 +79,30 @@
             NSLog(error.description);
         } else{
             [self setTweet];
+            [self.delegate onDataChange];
             NSLog(@"success in favoriting tweet!");
+        }
+
+    }];
+
+}
+- (IBAction)didRetweet:(id)sender {
+    if(self.tweet.retweeted){
+        self.tweet.retweetCount -= 1;
+        self.tweet.retweeted = false;
+    } else{
+        self.tweet.retweetCount += 1;
+        self.tweet.retweeted = true;
+    }
+
+//    [self setTweet];
+    [[APIManager shared] retweet:self.tweet completion: ^(Tweet *tweet, NSError *error){
+        if(error){
+            NSLog(@"error retweeting tweet");
+        } else{
+            [self setTweet];
+            [self.delegate onDataChange];
+            NSLog(@"success in retweeting tweet!");
         }
 
     }];
@@ -109,10 +111,10 @@
 - (void) setTweet {
     if(self.tweet.favorited){
         UIImage *redFavorIcon = [UIImage imageNamed:@"favor-icon-red"];
-        [self.likeButton setImage:redFavorIcon forState:UIControlStateNormal];
+        [self.favoriteButton setImage:redFavorIcon forState:UIControlStateNormal];
     } else{
         UIImage *greyFavorIcon = [UIImage imageNamed:@"favor-icon"];
-        [self.likeButton setImage:greyFavorIcon forState:UIControlStateNormal];
+        [self.favoriteButton setImage:greyFavorIcon forState:UIControlStateNormal];
     }
     
     if(self.tweet.retweeted){
@@ -122,10 +124,11 @@
         UIImage *greyRetweetIcon = [UIImage imageNamed:@"retweet-icon"];
         [self.retweetButton setImage:greyRetweetIcon forState: UIControlStateNormal];
     }
-    self.tweetBodyLabel.text = self.tweet.text;
+    self.tweetBody.text = self.tweet.text;
     self.userName.text = self.tweet.user.name;
     self.numberOfShares.text = @"0";
     self.numberOfRetweets.text = [NSString stringWithFormat:@"%d", self.tweet.retweetCount? self.tweet.retweetCount: 0];
-    self.numberOfLikes.text = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount? self.tweet.favoriteCount : 0];
+    self.numberOfFavorites.text = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount? self.tweet.favoriteCount : 0];
 }
+
 @end
